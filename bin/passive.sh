@@ -53,11 +53,6 @@ wed|wept|wound|won|\
 withheld|withstood|wrung|\
 written"
 
-if [ "$1" = "" ]; then
- echo "usage: `basename $0` <file> ..."
- exit
-fi
-
 egrep -n -i --color \
  "\\b(am|are|were|being|is|been|was|be)\
 \\b[ ]*(\w+ed|($irregulars))\\b" $*

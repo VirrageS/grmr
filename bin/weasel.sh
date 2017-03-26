@@ -28,12 +28,6 @@ if [ ! "$wordfile" = "" ]; then
     done
 fi
 
-
-if [ "$1" = "" ]; then
- echo "usage: `basename $0` <file> ..."
- exit
-fi
-
 egrep -i -n --color "\\b($weasels)\\b" $*
 
 exit $?
