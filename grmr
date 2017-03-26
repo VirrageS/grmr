@@ -1,0 +1,36 @@
+#!/bin/bash
+
+HELPER_DIR="/usr/local/share/grmr"
+
+usage() {
+	echo -e "grmr - Simple grammary and style checker.\n"
+	echo -e "Usage:"
+	echo -e "  grmr file1.tex file2.txt ..."
+	echo -e ""
+	echo -e "Available Commands:"
+
+	echo -n "  help"
+	echo -e "\t\t\tPrints the usage"
+	echo -e ""
+}
+
+grmr_check() {
+	echo "weasel words: "
+	sh "$HELPER_DIR/weasel.sh" $*
+	echo ""
+	echo "passive voice: "
+	sh "$HELPER_DIR/passive.sh" $*
+	echo ""
+	echo "duplicates: "
+	perl "$HELPER_DIR/ill" $*
+	echo ""
+}
+
+case "$#:$1" in
+	0:*|1:help)
+		usage
+		;;
+	*)
+		grmr_check $*
+		;;
+esac
