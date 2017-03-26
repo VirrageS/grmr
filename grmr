@@ -25,19 +25,19 @@ usage() {
 }
 
 grmr_check_weasel() {
-	echo "weasel words: "
+	echo "Weasel words: "
 	sh "$HELPER_DIR/weasel.sh" $*
 	echo ""
 }
 
 grmr_check_passive() {
-	echo "passive voice: "
+	echo "Passive voice: "
 	sh "$HELPER_DIR/passive.sh" $*
 	echo ""
 }
 
 grmr_check_ill() {
-	echo "duplicates: "
+	echo "Duplicates: "
 	perl "$HELPER_DIR/ill" $*
 	echo ""
 }
