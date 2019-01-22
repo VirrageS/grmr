@@ -1,0 +1,9 @@
+[package]
+name = "grmr"
+version = "0.1.0"
+authors = ["Janusz Marcinkiewicz <virrages@gmail.com>"]
+
+[dependencies]
+clap = "2.32.0"
+regex = "1.1.0"
+colored = "1.7"
