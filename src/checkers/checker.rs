@@ -62,7 +62,7 @@ pub struct Checkers {
 
 impl Checkers {
     pub fn new() -> Checkers {
-        Checkers{
+        Checkers {
             checkers: vec![
                 Box::new(Dups::new()),
                 Box::new(Passive::new()),

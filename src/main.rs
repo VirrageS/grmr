@@ -1,8 +1,10 @@
 extern crate clap;
+extern crate glob;
 mod checkers;
 
 use checkers::*;
 use clap::{App, Arg};
+use glob::glob;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -12,24 +14,24 @@ fn main() -> std::io::Result<()> {
         .version("0.1.0")
         .author("Janusz Marcinkiewicz <virrages@gmail.com>")
         .about("Grammar checking tool")
-        .arg(Arg::with_name("weasel")
-                               .long("weasel")
-        .help("Check documents only for weasel words. Weasel words make sentence 'weaker'."))
-        .arg(Arg::with_name("passive")
-                               .long("passive").help("Check documents only for passive voice. Using passive voice can hide important informations."))
-        .arg(Arg::with_name("ill")
-                                       .long("ill")
-.help("Check documents only for illusion/duplicate words like: \"... the the ...\" etc."))
-.arg(Arg::with_name("FILE").multiple(true).required(true))
+        .arg(Arg::with_name("weasel").long("weasel").help("Check documents only for weasel words. Weasel words make sentence 'weaker'."))
+        .arg(Arg::with_name("passive").long("passive").help("Check documents only for passive voice. Using passive voice can hide important informations."))
+        .arg(Arg::with_name("ill").long("ill").help("Check documents only for illusion/duplicate words like: \"... the the ...\" etc."))
+        .arg(Arg::with_name("FILE").multiple(true).required(true))
         .get_matches();
 
-    let file_names = matches.values_of("FILE").unwrap();
+    let patterns = matches.values_of("FILE").unwrap();
     let checkers = Checkers::new();
-    for file_name in file_names {
-        let mut file = File::open(file_name)?;
-        let reader = BufReader::new(file);
-        let lines: Vec<String> = reader.lines().collect::<Result<_, _>>().unwrap();
-        checkers.check_all(file_name, lines);
+    for pattern in patterns {
+        // TODO: fix this `unwrap` circus...
+        for path in glob(pattern).unwrap() {
+            let unwrapped_path = path.unwrap();
+            let path_cleaned = unwrapped_path.to_str().unwrap();
+            let mut file = File::open(path_cleaned)?;
+            let reader = BufReader::new(file);
+            let lines: Vec<String> = reader.lines().collect::<Result<_, _>>().unwrap();
+            checkers.check_all(path_cleaned, lines);
+        }
     }
 
     Ok(())

@@ -4,11 +4,17 @@ version = "0.1.0"
 authors = ["Janusz Marcinkiewicz <virrages@gmail.com>"]
 readme = "README.md"
 license = "MIT"
+keywords = ["argument", "cli", "arg", "parser", "parse"]
+categories = ["command-line-interface"]
 description = """
-Grmr - improve your writing
+Simple command-line app to fix your writing
 """
+
+[badges]
+travis-ci = { repository = "VirrageS/grmr" }
 
 [dependencies]
 clap = "2.32.0"
 regex = "1.1.0"
 colored = "1.7"
+glob = "0.2.11"
