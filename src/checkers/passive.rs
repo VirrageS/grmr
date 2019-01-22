@@ -59,17 +59,27 @@ written
 
 pub struct Passive {}
 
-impl Checker for Passive {
-    fn check(file_name: &str, file_content: Vec<String>) {
-        print_header("PASSIVE", file_name);
+impl Passive {
+    pub fn new() -> Passive {
+        Passive {}
+    }
+}
 
+impl Checker for Passive {
+    fn name(&self) -> String {
+        "PASSIVE VOICE".to_owned()
+    }
+
+    fn matches<'a>(&self, file_content: &'a Vec<String>) -> Vec<LineMatches<'a>> {
         let re = Regex::new(&PASSIVE).unwrap();
+        let mut matches: Vec<LineMatches> = vec![];
         for (idx, line) in file_content.iter().enumerate() {
             let mut lm = LineMatches::new(idx + 1, line);
             for mat in re.find_iter(&line) {
                 lm.add_match((mat.start(), mat.end()));
             }
-            lm.print()
+            matches.push(lm);
         }
+        matches
     }
 }

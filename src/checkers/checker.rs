@@ -1,4 +1,5 @@
 use super::colored::*;
+use super::*;
 
 pub struct LineMatches<'a> {
     pub line: &'a String,
@@ -38,14 +39,50 @@ impl<'a> LineMatches<'a> {
     }
 }
 
-pub trait Checker {
-    fn check(file_name: &str, file_content: Vec<String>);
+fn print_header(check_id: String, file_name: &str) {
+    println!(
+        "\nChecking {} for file: {}\n",
+        check_id.bold(),
+        file_name.underline(),
+    );
 }
 
-pub fn print_header(check_id: &str, file_name: &str) {
-    println!(
-        "Checking {} for file: {}\n",
-        check_id.bold(),
-        file_name.green(),
-    );
+fn print_no_matches_found() {
+    println!("{}", "No problems found!".green())
+}
+
+pub trait Checker {
+    fn name(&self) -> String;
+    fn matches<'a>(&self, file_content: &'a Vec<String>) -> Vec<LineMatches<'a>>;
+}
+
+pub struct Checkers {
+    checkers: Vec<Box<Checker>>,
+}
+
+impl Checkers {
+    pub fn new() -> Checkers {
+        Checkers{
+            checkers: vec![
+                Box::new(Dups::new()),
+                Box::new(Passive::new()),
+                Box::new(Weasel::new()),
+            ],
+        }
+    }
+
+    pub fn check_all(&self, file_name: &str, file_content: Vec<String>) {
+        for checker in &self.checkers {
+            print_header(checker.name(), file_name);
+
+            let matches = checker.matches(&file_content);
+            if matches.len() == 0 {
+                print_no_matches_found();
+            } else {
+                for mat in matches {
+                    mat.print()
+                }
+            }
+        }
+    }
 }

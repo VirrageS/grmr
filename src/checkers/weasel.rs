@@ -5,17 +5,27 @@ const WEASELS: &str = r"\b(many|various|very|fairly|several|extremely|exceedingl
 
 pub struct Weasel {}
 
-impl Checker for Weasel {
-    fn check(file_name: &str, file_content: Vec<String>) {
-        print_header("WEASEL", file_name);
+impl Weasel {
+    pub fn new() -> Weasel {
+        Weasel {}
+    }
+}
 
+impl Checker for Weasel {
+    fn name(&self) -> String {
+        "WEASELS".to_owned()
+    }
+
+    fn matches<'a>(&self, file_content: &'a Vec<String>) -> Vec<LineMatches<'a>> {
         let re = Regex::new(WEASELS).unwrap();
+        let mut matches: Vec<LineMatches> = vec![];
         for (idx, line) in file_content.iter().enumerate() {
             let mut lm = LineMatches::new(idx + 1, line);
             for mat in re.find_iter(&line) {
                 lm.add_match((mat.start(), mat.end()));
             }
-            lm.print()
+            matches.push(lm)
         }
+        matches
     }
 }

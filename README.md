@@ -8,11 +8,8 @@ Scripts were copied from: http://matt.might.net/articles/shell-scripts-for-passi
 ## Installation
 
 ```
-$ git clone https://github.com/VirrageS/grmr.git
-$ cd grmr
-$ make install
+$ cargo install grmr
 ```
-
 
 ## Usage
 
@@ -22,13 +19,4 @@ $ grmr weasel paper.tex ~/folder/*.tex     # check documents for weasel words
 $ grmr passive paper.tex ~/folder/*.tex    # check documents for passive voice
 $ grmr ill paper.tex ~/folder/*.tex        # check documents for illusion/duplicate words
 $ grmr help                                # show help
-```
-
-
-## Deinstallation
-
-```
-$ make clean
-$ cd ..
-$ rm -rf grmr
 ```

@@ -24,17 +24,12 @@ fn main() -> std::io::Result<()> {
         .get_matches();
 
     let file_names = matches.values_of("FILE").unwrap();
+    let checkers = Checkers::new();
     for file_name in file_names {
         let mut file = File::open(file_name)?;
         let reader = BufReader::new(file);
         let lines: Vec<String> = reader.lines().collect::<Result<_, _>>().unwrap();
-
-        Dups::check(file_name, lines.clone());
-        println!("");
-        Passive::check(file_name, lines.clone());
-        println!("");
-        Weasel::check(file_name, lines.clone());
-        println!("");
+        checkers.check_all(file_name, lines);
     }
 
     Ok(())
