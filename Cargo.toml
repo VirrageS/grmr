@@ -2,6 +2,11 @@
 name = "grmr"
 version = "0.1.0"
 authors = ["Janusz Marcinkiewicz <virrages@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+description = """
+Grmr - improve your writing
+"""
 
 [dependencies]
 clap = "2.32.0"
