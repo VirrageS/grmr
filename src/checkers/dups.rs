@@ -53,10 +53,7 @@ mod tests {
     fn simple_word_annotation() {
         let line = "large fox jumping over";
         let words = annotate_words(line);
-        assert_eq!(
-            words,
-            vec![(0, "large"), (6, "fox"), (10, "jumping"), (18, "over")]
-        );
+        assert_eq!(words, vec![(0, "large"), (6, "fox"), (10, "jumping"), (18, "over")]);
     }
 
     #[test]

@@ -1,6 +1,6 @@
 [package]
 name = "grmr"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Janusz Marcinkiewicz <virrages@gmail.com>"]
 readme = "README.md"
 license = "MIT"
