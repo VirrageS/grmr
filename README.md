@@ -6,7 +6,7 @@
 
 `grmr` is simple command for improving writing and grammar checking.
 
-Scripts were copied from: http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
+Scripts were inspired by: http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 
 
 ## Installation
