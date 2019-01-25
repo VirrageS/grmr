@@ -2,6 +2,7 @@ extern crate clap;
 extern crate glob;
 mod checkers;
 
+use std::error;
 use checkers::*;
 use clap::{App, Arg};
 use glob::glob;
@@ -9,7 +10,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-fn main() -> std::io::Result<()> {
+fn main() -> std::result::Result<(), Box<error::Error>>{
     let matches = App::new("grmr")
         .version("0.1.0")
         .author("Janusz Marcinkiewicz <virrages@gmail.com>")
@@ -23,14 +24,13 @@ fn main() -> std::io::Result<()> {
     let patterns = matches.values_of("FILE").unwrap();
     let checkers = Checkers::new();
     for pattern in patterns {
-        // TODO: fix this `unwrap` circus...
-        for path in glob(pattern).unwrap() {
-            let unwrapped_path = path.unwrap();
-            let path_cleaned = unwrapped_path.to_str().unwrap();
-            let mut file = File::open(path_cleaned)?;
-            let reader = BufReader::new(file);
-            let lines: Vec<String> = reader.lines().collect::<Result<_, _>>().unwrap();
-            checkers.check_all(path_cleaned, lines);
+        for path in glob(pattern)? {
+            if let Some(path_cleaned) = path?.to_str() {
+                let mut file = File::open(path_cleaned)?;
+                let reader = BufReader::new(file);
+                let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
+                checkers.check_all(path_cleaned, lines);
+            }
         }
     }
 
