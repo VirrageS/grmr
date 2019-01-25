@@ -1,6 +1,15 @@
 use super::colored::*;
 use super::*;
+use std::collections::HashMap;
 
+#[derive(Hash, Eq, PartialEq, Debug)]
+pub enum CheckerType {
+    Passive,
+    Weasel,
+    Dups,
+}
+
+#[derive(Debug)]
 pub struct LineMatches<'a> {
     pub line: &'a String,
     pub line_idx: usize,
@@ -40,11 +49,7 @@ impl<'a> LineMatches<'a> {
 }
 
 fn print_header(check_id: String, file_name: &str) {
-    println!(
-        "\nChecking {} for file: {}\n",
-        check_id.bold(),
-        file_name.underline(),
-    );
+    println!("\nChecking {} for file: {}\n", check_id.bold(), file_name.underline(),);
 }
 
 fn print_no_matches_found() {
@@ -57,22 +62,22 @@ pub trait Checker {
 }
 
 pub struct Checkers {
-    checkers: Vec<Box<Checker>>,
+    checkers: HashMap<CheckerType, Box<Checker>>,
 }
 
 impl Checkers {
     pub fn new() -> Checkers {
-        Checkers {
-            checkers: vec![
-                Box::new(Dups::new()),
-                Box::new(Passive::new()),
-                Box::new(Weasel::new()),
-            ],
-        }
+        let mut checkers: HashMap<CheckerType, Box<Checker>> = HashMap::new();
+        checkers.insert(CheckerType::Dups, Box::new(Dups::new()));
+        checkers.insert(CheckerType::Passive, Box::new(Passive::new()));
+        checkers.insert(CheckerType::Weasel, Box::new(Weasel::new()));
+
+        Checkers { checkers: checkers }
     }
 
-    pub fn check_all(&self, file_name: &str, file_content: Vec<String>) {
-        for checker in &self.checkers {
+    pub fn check(&self, to_check: &Vec<CheckerType>, file_name: &str, file_content: Vec<String>) {
+        for checker_ty in to_check {
+            let checker = &self.checkers[&checker_ty];
             print_header(checker.name(), file_name);
 
             let matches = checker.matches(&file_content);
